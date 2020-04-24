@@ -82,7 +82,7 @@ func (db *DB) CheckExpiry() int {
 	count := 0
 	//TODO: Maybe listing the bucket is more efficient.
 	//Loop thru cache and compare last modified, expire if stale
-	for k, v := range db.cache.GetALL() {
+	for k, v := range db.cache.GetALL(true) {
 		partid, ok := k.(string)
 		if ok {
 			part, ok := v.(*cachepartition)
@@ -145,7 +145,7 @@ func (db *DB) SetPart(partid, fname string, mutable bool) error {
 
 //Close closes the db and deletes all local database fragments
 func (db *DB) Close() {
-	for _, k := range db.cache.Keys() {
+	for _, k := range db.cache.Keys(true) {
 		db.cache.Remove(k)
 	}
 }
